@@ -1,50 +1,73 @@
-# Welcome to your Expo app 👋
+# TableReserveApp 
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Η **TableReserveApp** είναι μια mobile και web εφαρμογή κρατήσεων για εστιατόρια, σχεδιασμένη στα πλαίσια του μαθήματος **MOBILE & DISTRIBUTED SYSTEMS (CN6035_1).
 
-## Get started
+##  Περιγραφή Εφαρμογής
 
-1. Install dependencies
+Η εφαρμογή επιτρέπει στους χρήστες:
+- να εγγράφονται και να συνδέονται (με χρήση JWT),
+- να βλέπουν εστιατόρια και να κάνουν κρατήσεις,
+- να ψάχνουν εστιατόρια με βάση το όνομα η την τοποθεσία τους,
+- να βλέπουν το ιστορικό κρατήσεών τους.
 
-   ```bash
-   npm install
-   ```
+Οι διαχειριστές (admins) μπορούν:
+- να δημιουργούν, επεξεργάζονται και διαγράφουν εστιατόρια,
+- να διαχειρίζονται το μενού κάθε εστιατορίου,
+- να αποδέχονται ή απορρίπτουν κρατήσεις.
 
-2. Start the app
+##  Τεχνολογίες
 
-   ```bash
-   npx expo start
-   ```
+- **Frontend**: React Native (Expo), TypeScript
+- **Backend**: Node.js (Express)
+- **Database**: MariaDB
+- **Αυθεντικοποίηση**: JWT (με αποθήκευση σε AsyncStorage)
+- **Αρχιτεκτονική**: MVC (routes / controllers / models)
+- **Image Upload**: Multer + /uploads folder
+- **Search**: Υλοποίηση search bar με βάση όνομα/τοποθεσία
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+##  Δομή Project
 
 ```bash
-npm run reset-project
-```
+TableReserveApp/
+├── app/                    # React Native frontend
+│   ├── (tabs)/             # Οθόνες (Home, Profile, Dashboard, κ.ά.)
+│   └── components/         # Κοινά components
+├── server/                 # Express.js backend
+│   ├── routes/             # Routes για auth, admin, reservations, restaurants
+│   ├── controllers/        # Controllers (MVC pattern)
+│   ├── uploads/            # Ανεβασμένες εικόνες
+│   └── config/db.js        # Σύνδεση και αυτόματη δημιουργία DB
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Οδηγίες Εγκατάστασης
+bash:
+git clone https://github.com/kanakis000/TableReserveApp.git
+cd TableReserveApp
 
-## Learn more
+Backend:
+cd server
+npm install
+npm start
 
-To learn more about developing your project with Expo, look at the following resources:
+Frontend:
+cd ..
+npm install
+npx expo start
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Χρήση JWT:
+-Κατά το login, το token αποθηκεύεται στο AsyncStorage.
+-Ο χρήστης αναγνωρίζεται αυτόματα σε κάθε επόμενο άνοιγμα της εφαρμογής.
 
-## Join the community
+Σκοπός Εφαρμογής:
+Η εφαρμογή στοχεύει στο να προσφέρει ένα εύχρηστο περιβάλλον για εύκολες και γρήγορες κρατήσεις τραπεζιών,
+ενώ ταυτόχρονα επιτρέπει στους διαχειριστές εστιατορίων(admin) να οργανώνουν τις κρατήσεις και τα μενού τους.
 
-Join our community of developers creating universal apps.
+Δημήτρης Κανάκης
+Metropolitan College — University of East London
+Μάθημα: MOBILE & DISTRIBUTED SYSTEMS (CN6035_1)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+
+
+
+
+
