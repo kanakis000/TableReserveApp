@@ -46,16 +46,40 @@ cd TableReserveApp
 Backend:
 cd server
 npm install
-npm start
+node index.js
 
 Frontend:
 cd ..
 npm install
 npx expo start
 
+ Λογαριασμός διαχειριστή (default)
+Email: admin@example.com
+
+Κωδικός: admin123
+
+Σημειώσεις
+Η εφαρμογή υποστηρίζει Web και Mobile.
+
+Η σύνδεση με τον backend γίνεται μέσω http://localhost:5000 (web) ή http://<τοπική_ip>:5000 (mobile).
+
+Χρησιμοποιείται Expo Router, Express, MariaDB, JWT και AsyncStorage.
+
 Χρήση JWT:
 -Κατά το login, το token αποθηκεύεται στο AsyncStorage.
 -Ο χρήστης αναγνωρίζεται αυτόματα σε κάθε επόμενο άνοιγμα της εφαρμογής.
+
+Δημιουργία αρχείου .env
+Δημιούργησε ένα αρχείο .env μέσα στο server φάκελο με περιεχόμενο:
+
+ini
+Αντιγραφή
+Επεξεργασία
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=Dkanakis2004 (Ο_δικός_σας_κωδικός)
+DB_NAME=tablereserve_db
 
 Σκοπός Εφαρμογής:
 Η εφαρμογή στοχεύει στο να προσφέρει ένα εύχρηστο περιβάλλον για εύκολες και γρήγορες κρατήσεις τραπεζιών,
