@@ -1,13 +1,14 @@
 const mariadb = require('mariadb');
 const bcrypt = require('bcrypt');
+require('dotenv').config();
 
-const DB_NAME = 'tablereserve_db';
+const DB_NAME = process.env.DB_NAME || 'tablereserve_db';
 
 const rootPool = mariadb.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  password: 'Dkanakis2004',
-  port: 3306,
+  host: process.env.DB_HOST || '127.0.0.1',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  port: process.env.DB_PORT || 3306,
   connectionLimit: 5,
   allowPublicKeyRetrieval: true,
 });
@@ -17,15 +18,15 @@ let pool;
 async function initializeDatabase() {
   const rootConn = await rootPool.getConnection();
   await rootConn.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
-  console.log(` Database '${DB_NAME}' ensured.`);
+  console.log(`📁 Database '${DB_NAME}' ensured.`);
   rootConn.release();
 
   pool = mariadb.createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'Dkanakis2004',
+    host: process.env.DB_HOST || '127.0.0.1',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
     database: DB_NAME,
-    port: 3306,
+    port: process.env.DB_PORT || 3306,
     connectionLimit: 5,
     allowPublicKeyRetrieval: true,
   });
@@ -47,24 +48,10 @@ async function initializeDatabase() {
       restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
       name VARCHAR(100),
       location VARCHAR(100),
-      description TEXT
+      description TEXT,
+      image_url LONGTEXT
     )
   `);
-
-  const [imageCol] = await conn.query(`
-    SELECT COLUMN_NAME 
-    FROM INFORMATION_SCHEMA.COLUMNS 
-    WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'restaurants' AND COLUMN_NAME = 'image_url'
-  `, [DB_NAME]);
-
-  if (!imageCol) {
-    await conn.query(`
-      ALTER TABLE restaurants 
-      MODIFY COLUMN image_url LONGTEXT
-    `);
-    console.log(" 'image_url' column changed to LONGTEXT to support base64 images.");
-    
-  }
 
   await conn.query(`
     CREATE TABLE IF NOT EXISTS reservations (
@@ -74,24 +61,11 @@ async function initializeDatabase() {
       date DATE,
       time TIME,
       people_count INT,
+      status ENUM('pending', 'accepted', 'denied') DEFAULT 'pending',
       FOREIGN KEY (user_id) REFERENCES users(user_id),
       FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id)
     )
   `);
-
-  const [statusCol] = await conn.query(`
-    SELECT COLUMN_NAME 
-    FROM INFORMATION_SCHEMA.COLUMNS 
-    WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'reservations' AND COLUMN_NAME = 'status'
-  `, [DB_NAME]);
-
-  if (!statusCol) {
-    await conn.query(`
-      ALTER TABLE reservations 
-      ADD COLUMN status ENUM('pending', 'accepted', 'denied') DEFAULT 'pending'
-    `);
-    console.log(" 'status' column added to reservations table.");
-  }
 
   await conn.query(`
     CREATE TABLE IF NOT EXISTS menu_items (
@@ -118,7 +92,7 @@ async function initializeDatabase() {
   }
 
   conn.release();
-  console.log(' All tables and columns ensured.');
+  console.log('✅ All tables and columns ensured.');
 }
 
 module.exports = {
